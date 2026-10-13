@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Elevate Media Co.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #fff;
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #0d0d14;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-logo-mark {
+            position: relative;
+            width: 36px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo-mark span {
+            position: absolute;
+            left: 4px;
+            height: 2.5px;
+            background: #fff;
+            border-radius: 1px;
+        }
+
+        .sidebar-logo-mark span:nth-child(1) { top: 5px; width: 22px; }
+        .sidebar-logo-mark span:nth-child(2) { top: 12px; width: 16px; background: #a855f7; }
+        .sidebar-logo-mark span:nth-child(3) { top: 19px; width: 22px; }
+
+        .sidebar-logo-text strong {
+            display: block;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+        }
+
+        .sidebar-logo-text small {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-footer-brand {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            line-height: 1.4;
+        }
+
+        .sidebar-footer-brand strong {
+            display: block;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            margin-left: 240px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: #0a0a0f;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-toggle-mobile {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 6px 14px 6px 6px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-menu i {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #16161e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            min-width: 160px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-dropdown a,
+        .user-dropdown button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 13px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            text-align: left;
+            transition: background 0.15s ease;
+        }
+
+        .user-dropdown a:hover,
+        .user-dropdown button:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
+
+        .user-dropdown .logout-btn {
+            color: #f87171;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Content */
+        .content {
+            padding: 28px 32px 40px;
+            flex: 1;
+        }
+
+        .greeting {
+            margin-bottom: 28px;
+        }
+
+        .greeting h1 {
+            font-family: "Poppins", sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .greeting p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .greeting-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 8px;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: #12121a;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(168, 85, 247, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a855f7;
+            font-size: 16px;
+        }
+
+        .stat-value {
+            font-family: "Poppins", sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-change.up {
+            color: #34d399;
+        }
+
+        .stat-change.neutral {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Panels */
+        .panels {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #12121a;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .panel-title i {
+            color: #a855f7;
+            font-size: 14px;
+        }
+
+        .panel-link {
+            font-size: 13px;
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .panel-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            font-size: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status.confirmed {
+            background: rgba(52, 211, 153, 0.15);
+            color: #34d399;
+        }
+
+        .status.pending {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .status.completed {
+            background: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+        }
+
+        .btn-view {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            color: #c4b5fd;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn-view:hover {
+            background: rgba(168, 85, 247, 0.25);
+            color: #fff;
+        }
+
+        /* Messages list */
+        .messages-list {
+            padding: 8px 0;
+        }
+
+        .message-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.15s ease;
+            cursor: pointer;
+        }
+
+        .message-item:last-child {
+            border-bottom: none;
+        }
+
+        .message-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .message-preview {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            white-space: nowrap;
+        }
+
+        .message-badge {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #a855f7;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 90;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .menu-toggle-mobile {
+                display: block;
+            }
+
+            .content {
+                padding: 20px 16px 32px;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Placeholder pages */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .placeholder-page {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .placeholder-page i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: rgba(168, 85, 247, 0.4);
+        }
+
+        .placeholder-page h2 {
+            font-family: "Poppins", sans-serif;
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-mark">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="sidebar-logo-text">
+                <strong>ELEVATE</strong>
+                <small>MEDIA CO.</small>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-page="dashboard">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </button>
+            <button class="nav-item" data-page="bookings">
+                <i class="fa-regular fa-calendar"></i>
+                Bookings
+            </button>
+            <button class="nav-item" data-page="messages">
+                <i class="fa-regular fa-comment"></i>
+                Messages
+            </button>
+            <button class="nav-item" data-page="services">
+                <i class="fa-solid fa-briefcase"></i>
+                Services
+            </button>
+            <button class="nav-item" data-page="portfolio">
+                <i class="fa-regular fa-image"></i>
+                Portfolio
+            </button>
+            <button class="nav-item" data-page="settings">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-brand">
+                <strong>ELEVATE</strong>
+                Your Story, Our Focus
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+        <!-- Top bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle-mobile" id="menuToggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="user-menu" id="userMenu">
+                <div class="user-avatar">A</div>
+                <span class="user-name">Admin</span>
+                <i class="fa-solid fa-chevron-down"></i>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="index.html" target="_blank">
+                        <i class="fa-solid fa-globe"></i>
+                        View Website
+                    </a>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- DASHBOARD PAGE -->
+            <section class="page-section active" id="page-dashboard">
+                <div class="greeting">
+                    <h1>Good Morning, Admin</h1>
+                    <p>Here's what's happening with your Elevate Media Co. today.</p>
+                    <div class="greeting-date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span id="currentDate">Oct 13, 2026</span>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-regular fa-calendar"></i></div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Bookings</div>
+                        <div class="stat-change up">+3 this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-regular fa-comment"></i></div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">New Messages</div>
+                        <div class="stat-change up">+2 unread</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Active Clients</div>
+                        <div class="stat-change up">+2 this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Services</div>
+                        <div class="stat-change neutral">All active</div>
+                    </div>
+                </div>
+
+                <!-- Panels -->
+                <div class="panels">
+                    <!-- Recent Bookings -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fa-regular fa-calendar"></i>
+                                Recent Bookings
+                            </div>
+                            <a href="#" class="panel-link" data-page-link="bookings">View All →</a>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Client Name</th>
+                                        <th>Service</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Oct 12, 2026</td>
+                                        <td>Maria Santos</td>
+                                        <td>Photo Coverage</td>
+                                        <td><span class="status confirmed">Confirmed</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oct 11, 2026</td>
+                                        <td>James dela Cruz</td>
+                                        <td>Video Coverage</td>
+                                        <td><span class="status pending">Pending</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oct 10, 2026</td>
+                                        <td>RCL Youth</td>
+                                        <td>Event Coverage</td>
+                                        <td><span class="status confirmed">Confirmed</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oct 9, 2026</td>
+                                        <td>Grace Tan</td>
+                                        <td>Graphic Design</td>
+                                        <td><span class="status completed">Completed</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oct 8, 2026</td>
+                                        <td>Faith Church</td>
+                                        <td>Livestream</td>
+                                        <td><span class="status confirmed">Confirmed</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oct 7, 2026</td>
+                                        <td>Daniel Reyes</td>
+                                        <td>Video Editing</td>
+                                        <td><span class="status pending">Pending</span></td>
+                                        <td><button class="btn-view">View</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Messages -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fa-regular fa-comment"></i>
+                                Recent Messages
+                            </div>
+                            <a href="#" class="panel-link" data-page-link="messages">View All →</a>
+                        </div>
+                        <div class="messages-list">
+                            <div class="message-item">
+                                <div class="message-avatar">M</div>
+                                <div class="message-body">
+                                    <div class="message-name">Maria Santos</div>
+                                    <div class="message-preview">Hi! I just want to follow up on my booking for...</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">10:24 AM</span>
+                                    <span class="message-badge">2</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-avatar">J</div>
+                                <div class="message-body">
+                                    <div class="message-name">James dela Cruz</div>
+                                    <div class="message-preview">Can you send me the quotation for the video...</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">Yesterday</span>
+                                    <span class="message-badge">1</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-avatar">R</div>
+                                <div class="message-body">
+                                    <div class="message-name">RCL Youth</div>
+                                    <div class="message-preview">Thank you so much! We really appreciate the...</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">Yesterday</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-avatar">G</div>
+                                <div class="message-body">
+                                    <div class="message-name">Grace Tan</div>
+                                    <div class="message-preview">Is it possible to add an extra day for the coverage?</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">Oct 11</span>
+                                    <span class="message-badge">1</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-avatar">F</div>
+                                <div class="message-body">
+                                    <div class="message-name">Faith Church</div>
+                                    <div class="message-preview">Noted po. Thank you!</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">Oct 10</span>
+                                </div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-avatar">D</div>
+                                <div class="message-body">
+                                    <div class="message-name">Daniel Reyes</div>
+                                    <div class="message-preview">Do you have available slots this week?</div>
+                                </div>
+                                <div class="message-meta">
+                                    <span class="message-time">Oct 9</span>
+                                    <span class="message-badge">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOOKINGS PAGE -->
+            <section class="page-section" id="page-bookings">
+                <div class="greeting">
+                    <h1>Bookings</h1>
+                    <p>Manage all event bookings and requests.</p>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fa-regular fa-calendar"></i>
+                            All Bookings
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Client Name</th>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oct 12, 2026</td>
+                                    <td>Maria Santos</td>
+                                    <td>Photo Coverage</td>
+                                    <td><span class="status confirmed">Confirmed</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 11, 2026</td>
+                                    <td>James dela Cruz</td>
+                                    <td>Video Coverage</td>
+                                    <td><span class="status pending">Pending</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 10, 2026</td>
+                                    <td>RCL Youth</td>
+                                    <td>Event Coverage</td>
+                                    <td><span class="status confirmed">Confirmed</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 9, 2026</td>
+                                    <td>Grace Tan</td>
+                                    <td>Graphic Design</td>
+                                    <td><span class="status completed">Completed</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 8, 2026</td>
+                                    <td>Faith Church</td>
+                                    <td>Livestream</td>
+                                    <td><span class="status confirmed">Confirmed</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 7, 2026</td>
+                                    <td>Daniel Reyes</td>
+                                    <td>Video Editing</td>
+                                    <td><span class="status pending">Pending</span></td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MESSAGES PAGE -->
+            <section class="page-section" id="page-messages">
+                <div class="greeting">
+                    <h1>Messages</h1>
+                    <p>Client inquiries and conversations.</p>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fa-regular fa-comment"></i>
+                            Inbox
+                        </div>
+                    </div>
+                    <div class="messages-list">
+                        <div class="message-item">
+                            <div class="message-avatar">M</div>
+                            <div class="message-body">
+                                <div class="message-name">Maria Santos</div>
+                                <div class="message-preview">Hi! I just want to follow up on my booking for...</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">10:24 AM</span>
+                                <span class="message-badge">2</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">J</div>
+                            <div class="message-body">
+                                <div class="message-name">James dela Cruz</div>
+                                <div class="message-preview">Can you send me the quotation for the video...</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">Yesterday</span>
+                                <span class="message-badge">1</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">R</div>
+                            <div class="message-body">
+                                <div class="message-name">RCL Youth</div>
+                                <div class="message-preview">Thank you so much! We really appreciate the...</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">Yesterday</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">G</div>
+                            <div class="message-body">
+                                <div class="message-name">Grace Tan</div>
+                                <div class="message-preview">Is it possible to add an extra day for the coverage?</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">Oct 11</span>
+                                <span class="message-badge">1</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">F</div>
+                            <div class="message-body">
+                                <div class="message-name">Faith Church</div>
+                                <div class="message-preview">Noted po. Thank you!</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">Oct 10</span>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <div class="message-avatar">D</div>
+                            <div class="message-body">
+                                <div class="message-name">Daniel Reyes</div>
+                                <div class="message-preview">Do you have available slots this week?</div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">Oct 9</span>
+                                <span class="message-badge">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SERVICES PAGE -->
+            <section class="page-section" id="page-services">
+                <div class="greeting">
+                    <h1>Services</h1>
+                    <p>Manage your media service offerings.</p>
+                </div>
+                <div class="placeholder-page">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <h2>Services Management</h2>
+                    <p>Service editing will be available here.</p>
+                </div>
+            </section>
+
+            <!-- PORTFOLIO PAGE -->
+            <section class="page-section" id="page-portfolio">
+                <div class="greeting">
+                    <h1>Portfolio</h1>
+                    <p>Manage showcase images and categories.</p>
+                </div>
+                <div class="placeholder-page">
+                    <i class="fa-regular fa-image"></i>
+                    <h2>Portfolio Management</h2>
+                    <p>Upload and organize portfolio items here.</p>
+                </div>
+            </section>
+
+            <!-- SETTINGS PAGE -->
+            <section class="page-section" id="page-settings">
+                <div class="greeting">
+                    <h1>Settings</h1>
+                    <p>Account and system preferences.</p>
+                </div>
+                <div class="placeholder-page">
+                    <i class="fa-solid fa-gear"></i>
+                    <h2>Settings</h2>
+                    <p>Profile and configuration options will appear here.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Auth check
+            const userRaw = localStorage.getItem("elevateUser");
+            if (!userRaw) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userRaw);
+                if (user.role !== "admin") {
+                    window.location.href = "index.html";
+                    return;
+                }
+            } catch (e) {
+                localStorage.removeItem("elevateUser");
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Date
+            const dateEl = document.getElementById("currentDate");
+            if (dateEl) {
+                const now = new Date();
+                dateEl.textContent = now.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                });
+            }
+
+            // Greeting time of day
+            const hour = new Date().getHours();
+            let greeting = "Good Morning";
+            if (hour >= 12 && hour < 17) greeting = "Good Afternoon";
+            else if (hour >= 17) greeting = "Good Evening";
+            const h1 = document.querySelector("#page-dashboard .greeting h1");
+            if (h1) h1.textContent = greeting + ", Admin";
+
+            // Sidebar navigation
+            const navItems = document.querySelectorAll(".nav-item");
+            const pages = document.querySelectorAll(".page-section");
+
+            function showPage(pageId) {
+                pages.forEach(function (p) {
+                    p.classList.remove("active");
+                });
+                navItems.forEach(function (n) {
+                    n.classList.remove("active");
+                });
+
+                const page = document.getElementById("page-" + pageId);
+                if (page) page.classList.add("active");
+
+                const nav = document.querySelector('.nav-item[data-page="' + pageId + '"]');
+                if (nav) nav.classList.add("active");
+
+                // Close mobile sidebar
+                sidebar.classList.remove("open");
+                overlay.classList.remove("show");
+            }
+
+            navItems.forEach(function (item) {
+                item.addEventListener("click", function () {
+                    showPage(item.dataset.page);
+                });
+            });
+
+            // Panel "View All" links
+            document.querySelectorAll("[data-page-link]").forEach(function (link) {
+                link.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    showPage(link.dataset.pageLink);
+                });
+            });
+
+            // Mobile sidebar
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("sidebarOverlay");
+            const menuToggle = document.getElementById("menuToggle");
+
+            menuToggle.addEventListener("click", function () {
+                sidebar.classList.toggle("open");
+                overlay.classList.toggle("show");
+            });
+
+            overlay.addEventListener("click", function () {
+                sidebar.classList.remove("open");
+                overlay.classList.remove("show");
+            });
+
+            // User dropdown
+            const userMenu = document.getElementById("userMenu");
+            const userDropdown = document.getElementById("userDropdown");
+
+            userMenu.addEventListener("click", function (e) {
+                e.stopPropagation();
+                userDropdown.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function () {
+                userDropdown.classList.remove("show");
+            });
+
+            // Logout
+            document.getElementById("logoutBtn").addEventListener("click", function () {
+                localStorage.removeItem("elevateUser");
+                localStorage.removeItem("elevateRole");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>

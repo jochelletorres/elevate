@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Elevate Media Co.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #020205;
+            font-family: "Inter", sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient purple glows */
+        body::before,
+        body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            width: 420px;
+            height: 420px;
+            background: rgba(91, 0, 180, 0.35);
+            top: -120px;
+            left: -100px;
+        }
+
+        body::after {
+            width: 380px;
+            height: 380px;
+            background: rgba(71, 0, 140, 0.28);
+            bottom: -100px;
+            right: -80px;
+        }
+
+        .login-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .logo-mark {
+            position: relative;
+            width: 56px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-mark span {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 3px;
+            background: #fff;
+            border-radius: 1px;
+        }
+
+        .logo-mark span:nth-child(1) {
+            top: 8px;
+            width: 28px;
+        }
+
+        .logo-mark span:nth-child(2) {
+            top: 18px;
+            width: 20px;
+            background: #a855f7;
+        }
+
+        .logo-mark span:nth-child(3) {
+            top: 28px;
+            width: 28px;
+        }
+
+        .logo-text {
+            text-align: center;
+        }
+
+        .logo-text strong {
+            display: block;
+            font-family: "Poppins", sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.45em;
+            color: #fff;
+        }
+
+        .logo-text small {
+            display: block;
+            margin-top: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        /* Heading */
+        .login-heading {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-heading h1 {
+            font-family: "Poppins", sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .login-heading p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        /* Role toggle */
+        .role-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 999px;
+            padding: 4px;
+            margin-bottom: 28px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .role-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .role-btn i {
+            font-size: 13px;
+        }
+
+        .role-btn.active {
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Form */
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 0 48px 0 48px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-group input:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+        }
+
+        .input-group .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .input-group .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 15px;
+            padding: 4px;
+        }
+
+        .input-group .toggle-password:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Login button */
+        .login-btn {
+            width: 100%;
+            height: 52px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 24px rgba(124, 58, 237, 0.35);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(124, 58, 237, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Forgot password */
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            color: #a855f7;
+        }
+
+        /* Error message */
+        .error-msg {
+            display: none;
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #fca5a5;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* Demo hint */
+        .demo-hint {
+            margin-top: 32px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .demo-hint strong {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 480px) {
+            .login-wrapper {
+                padding: 16px;
+            }
+
+            .login-heading h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <!-- Logo -->
+        <div class="logo">
+            <div class="logo-mark">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo-text">
+                <strong>ELEVATE</strong>
+                <small>MEDIA CO.</small>
+            </div>
+        </div>
+
+        <!-- Heading -->
+        <div class="login-heading">
+            <h1>Welcome Back</h1>
+            <p>Log in to your account</p>
+        </div>
+
+        <!-- Role Toggle -->
+        <div class="role-toggle">
+            <button type="button" class="role-btn active" data-role="admin" id="adminBtn">
+                <i class="fa-solid fa-user-shield"></i>
+                Admin
+            </button>
+            <button type="button" class="role-btn" data-role="customer" id="customerBtn">
+                <i class="fa-solid fa-user"></i>
+                Customer
+            </button>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="errorMsg"></div>
+
+        <!-- Form -->
+        <form class="login-form" id="loginForm">
+            <div class="input-group">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                <input type="email" id="email" placeholder="Email Address" required autocomplete="email">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">Log In</button>
+        </form>
+
+        <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+
+        <div class="demo-hint">
+            <strong>Demo credentials</strong><br>
+            Admin: admin@elevate.com / admin123<br>
+            Customer: customer@elevate.com / customer123<br>
+            <span style="opacity:0.7">(or any email/password works)</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const adminBtn = document.getElementById("adminBtn");
+            const customerBtn = document.getElementById("customerBtn");
+            const loginForm = document.getElementById("loginForm");
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const togglePassword = document.getElementById("togglePassword");
+            const errorMsg = document.getElementById("errorMsg");
+            const loginBtn = document.getElementById("loginBtn");
+            const forgotLink = document.getElementById("forgotLink");
+
+            let selectedRole = "admin";
+
+            // Role toggle
+            function setRole(role) {
+                selectedRole = role;
+                if (role === "admin") {
+                    adminBtn.classList.add("active");
+                    customerBtn.classList.remove("active");
+                } else {
+                    customerBtn.classList.add("active");
+                    adminBtn.classList.remove("active");
+                }
+            }
+
+            adminBtn.addEventListener("click", function () {
+                setRole("admin");
+            });
+
+            customerBtn.addEventListener("click", function () {
+                setRole("customer");
+            });
+
+            // Toggle password visibility
+            togglePassword.addEventListener("click", function () {
+                const isPassword = passwordInput.type === "password";
+                passwordInput.type = isPassword ? "text" : "password";
+                const icon = togglePassword.querySelector("i");
+                icon.className = isPassword ? "fa-regular fa-eye-slash" : "fa-regular fa-eye";
+            });
+
+            // Forgot password
+            forgotLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                alert("Password reset is not available in this demo.\nPlease use the demo credentials shown below.");
+            });
+
+            // Login
+            loginForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                errorMsg.classList.remove("show");
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+
+                if (!email || !password) {
+                    errorMsg.textContent = "Please enter both email and password.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                // Simple validation (demo accepts any non-empty, or specific demos)
+                loginBtn.disabled = true;
+                loginBtn.textContent = "Logging in...";
+
+                // Simulate network delay
+                setTimeout(function () {
+                    // Store session
+                    const user = {
+                        email: email,
+                        role: selectedRole,
+                        name: selectedRole === "admin" ? "Admin" : "Customer",
+                        loggedInAt: new Date().toISOString()
+                    };
+
+                    localStorage.setItem("elevateUser", JSON.stringify(user));
+                    localStorage.setItem("elevateRole", selectedRole);
+
+                    if (selectedRole === "admin") {
+                        window.location.href = "admin-dashboard.html";
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                }, 600);
+            });
+
+            // If already logged in, redirect
+            const existing = localStorage.getItem("elevateUser");
+            if (existing) {
+                try {
+                    const user = JSON.parse(existing);
+                    if (user.role === "admin") {
+                        window.location.href = "admin-dashboard.html";
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                } catch (err) {
+                    localStorage.removeItem("elevateUser");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
